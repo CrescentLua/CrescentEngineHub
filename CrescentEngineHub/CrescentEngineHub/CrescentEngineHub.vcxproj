@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{5442449B-A493-46C1-AB26-F817EC22632D}</ProjectGuid>
     <RootNamespace>CrescentEngineHub</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -123,9 +123,6 @@
     <ClCompile Include="UpdateListener.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CrescentHub.h" />
     <ClInclude Include="FileWatcher\FileWatcher.h" />
     <ClInclude Include="FileWatcher\FileWatcherImpl.h" />
@@ -133,6 +130,9 @@
     <ClInclude Include="FileWatcher\FileWatcherOSX.h" />
     <ClInclude Include="FileWatcher\FileWatcherWin32.h" />
     <ClInclude Include="FileWatcher\UpdateListener.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
