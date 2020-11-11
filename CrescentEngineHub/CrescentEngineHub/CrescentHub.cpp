@@ -4,6 +4,7 @@ std::unique_ptr<CrescentHub> CrescentHub::hubInstance = nullptr;
 
 CrescentHub::CrescentHub() {
 	isRunning = false; 
+	isUploading = false; 
 }
 
 CrescentHub::~CrescentHub() {
@@ -27,12 +28,37 @@ void CrescentHub::Run() {
 
 	while (isRunning) {
 		Update(); 
+
+		if (_kbhit())
+		{
+			char ch = _getch();
+			switch (ch)
+			{
+				case 13: //When User presses Enter, upload all the files 
+					if (filesMap.size() > 0 && isUploading == false) {
+						isUploading = true; 
+						for (auto file : filesMap) {
+							UploadFile(file.second.directory, file.second.fileName);
+						}
+
+						isUploading = false; 
+						filesMap.clear(); //Remove all the files within the map after uploading
+					}
+					
+					break;
+			}
+		}
 	}
+}
+
+void CrescentHub::AddToFilesMap(int fileKey_, FileDetails fileDetails_) {
+	filesMap.insert(std::pair<int, FileDetails>(fileKey_, fileDetails_));
 }
 
 void CrescentHub::UploadFile(std::string dir_, std::string filename_) {
 	Aws::InitAPI(options);
 	{
+		std::cout << "\nUploading File: " << filename_ << std::endl; 
 		ifstream newFileToUpload(dir_ + "/" + filename_);
 		std::stringstream fileContent;
 		fileContent << newFileToUpload.rdbuf();

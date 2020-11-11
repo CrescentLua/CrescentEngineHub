@@ -9,6 +9,7 @@
 #include <aws/core/Aws.h>
 #include <aws/core/utils/memory/stl/AWSStringStream.h> 
 #include "FileWatcher/UpdateListener.h"
+#include <conio.h>
 
 using namespace std;
 using namespace std::string_literals;
@@ -26,7 +27,7 @@ public:
 
 	static CrescentHub* GetInstance();
 	void Run(); 
-	void UploadFile(std::string dir_, std::string filename_); 
+	void AddToFilesMap(int fileKey_, FileDetails fileDetails_); 
 
 private: 
 	CrescentHub(); 
@@ -37,6 +38,7 @@ private:
 	Aws::SDKOptions options;
 	
 	bool isRunning; 
+	bool isUploading; 
 	void Update();
 
 	// create the listener (before the file watcher - so it gets destroyed after the file watcher)
@@ -44,5 +46,8 @@ private:
 
 	// create the file watcher object
 	FW::FileWatcher fileWatcher;
+
+	void UploadFile(std::string dir_, std::string filename_);
+	std::map<int, FileDetails> filesMap; 
 };
 #endif 
