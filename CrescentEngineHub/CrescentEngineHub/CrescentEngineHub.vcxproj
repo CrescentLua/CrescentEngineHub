@@ -140,6 +140,8 @@
     <Import Project="..\packages\AWSSDKCPP-Core.1.6.25\build\native\AWSSDKCPP-Core.targets" Condition="Exists('..\packages\AWSSDKCPP-Core.1.6.25\build\native\AWSSDKCPP-Core.targets')" />
     <Import Project="..\packages\AWSSDKCPP-S3.redist.1.6.20060301.25\build\native\AWSSDKCPP-S3.redist.targets" Condition="Exists('..\packages\AWSSDKCPP-S3.redist.1.6.20060301.25\build\native\AWSSDKCPP-S3.redist.targets')" />
     <Import Project="..\packages\AWSSDKCPP-S3.1.6.20060301.25\build\native\AWSSDKCPP-S3.targets" Condition="Exists('..\packages\AWSSDKCPP-S3.1.6.20060301.25\build\native\AWSSDKCPP-S3.targets')" />
+    <Import Project="..\packages\AWSSDKCPP-Transfer.redist.1.6.25\build\native\AWSSDKCPP-Transfer.redist.targets" Condition="Exists('..\packages\AWSSDKCPP-Transfer.redist.1.6.25\build\native\AWSSDKCPP-Transfer.redist.targets')" />
+    <Import Project="..\packages\AWSSDKCPP-Transfer.1.6.25\build\native\AWSSDKCPP-Transfer.targets" Condition="Exists('..\packages\AWSSDKCPP-Transfer.1.6.25\build\native\AWSSDKCPP-Transfer.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -149,5 +151,7 @@
     <Error Condition="!Exists('..\packages\AWSSDKCPP-Core.1.6.25\build\native\AWSSDKCPP-Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AWSSDKCPP-Core.1.6.25\build\native\AWSSDKCPP-Core.targets'))" />
     <Error Condition="!Exists('..\packages\AWSSDKCPP-S3.redist.1.6.20060301.25\build\native\AWSSDKCPP-S3.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AWSSDKCPP-S3.redist.1.6.20060301.25\build\native\AWSSDKCPP-S3.redist.targets'))" />
     <Error Condition="!Exists('..\packages\AWSSDKCPP-S3.1.6.20060301.25\build\native\AWSSDKCPP-S3.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AWSSDKCPP-S3.1.6.20060301.25\build\native\AWSSDKCPP-S3.targets'))" />
+    <Error Condition="!Exists('..\packages\AWSSDKCPP-Transfer.redist.1.6.25\build\native\AWSSDKCPP-Transfer.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AWSSDKCPP-Transfer.redist.1.6.25\build\native\AWSSDKCPP-Transfer.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\AWSSDKCPP-Transfer.1.6.25\build\native\AWSSDKCPP-Transfer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AWSSDKCPP-Transfer.1.6.25\build\native\AWSSDKCPP-Transfer.targets'))" />
   </Target>
 </Project>

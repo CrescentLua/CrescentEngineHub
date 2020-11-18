@@ -8,15 +8,19 @@
 #include <aws/s3/model/GetObjectRequest.h>
 #include <aws/core/Aws.h>
 #include <aws/core/utils/memory/stl/AWSStringStream.h> 
+#include <aws/transfer/TransferManager.h>
 #include "FileWatcher/UpdateListener.h"
 #include <conio.h>
+
 
 using namespace std;
 using namespace std::string_literals;
 using namespace Aws::S3;
 using namespace Aws::S3::Model;
+using namespace Aws::Transfer;
 
 static const char* BUCKET = "crescentenginebucket";
+static const char *ALLOC_TAG = "download";
 class CrescentHub
 {
 public: 
@@ -48,6 +52,7 @@ private:
 	FW::FileWatcher fileWatcher;
 
 	void UploadFile(std::string dir_, std::string filename_);
+	void DownloadFile(); 
 	std::map<int, FileDetails> filesMap; 
 };
 #endif 
