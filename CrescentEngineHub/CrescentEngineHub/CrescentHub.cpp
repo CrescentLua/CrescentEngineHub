@@ -68,6 +68,9 @@ void CrescentHub::DownloadFile() {
 	auto thread_executor = Aws::MakeShared<Aws::Utils::Threading::PooledThreadExecutor>(ALLOC_TAG, 4);
 	TransferManagerConfiguration transferConfig(thread_executor.get());
 	transferConfig.s3Client = s3Client;
+	
+	DownloadConfiguration downloadConfig;
+	downloadConfig.versionId = "Yu_oGmhApIJG_3Evgx3mQfTAESlWMY64";
 
 	transferConfig.transferStatusUpdatedCallback =
 		[](const TransferManager *,
@@ -84,7 +87,7 @@ void CrescentHub::DownloadFile() {
 	};
 
 	auto transferManager = TransferManager::Create(transferConfig);
-	auto transferHandle = transferManager->DownloadFile(BUCKET, "Test.cpp", "C:/Users/RuthlessLua/Desktop/AWSDownloads/Test.cpp");
+	auto transferHandle = transferManager->DownloadFile(BUCKET, "Test.cpp", "C:/Users/RuthlessLua/Desktop/AWSDownloads/Test.cpp", downloadConfig);
 	transferHandle->WaitUntilFinished();
 
 	std::cout << "Test.cpp Download Complete!\n" << std::endl; 
