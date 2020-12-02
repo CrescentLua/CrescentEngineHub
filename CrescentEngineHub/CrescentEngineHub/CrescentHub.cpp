@@ -52,6 +52,10 @@ void CrescentHub::Run() {
 				case 80: 
 					DownloadFile();
 					break; 
+
+				case 81:
+					CustomDownloadFile();
+					break;
 			}
 		}
 	}
@@ -59,6 +63,76 @@ void CrescentHub::Run() {
 
 void CrescentHub::AddToFilesMap(int fileKey_, FileDetails fileDetails_) {
 	filesMap.insert(std::pair<int, FileDetails>(fileKey_, fileDetails_));
+}
+
+void CrescentHub::CustomDownloadFile() {
+
+
+	std::string file; 
+	std::string answer; 
+	std::cout << "Please type the name of the file you wish to download (e.g. Test.cpp)" << std::endl; 
+
+	std::cin >> file; 
+	std::cout << "Is there a specific version of " << file << " you wish to Download? \n Type 'yes' or 'no'\n" << std::endl;
+	std::cin >> answer;
+
+	auto s3Client = Aws::MakeShared<Aws::S3::S3Client>(ALLOC_TAG);
+	auto thread_executor = Aws::MakeShared<Aws::Utils::Threading::PooledThreadExecutor>(ALLOC_TAG, 4);
+	TransferManagerConfiguration transferConfig(thread_executor.get());
+	transferConfig.s3Client = s3Client;
+
+	if (answer == "yes") {	
+		ListObjectVersionsRequest test;
+		test.SetBucket(BUCKET);
+		test.SetPrefix(file.c_str());
+
+		auto outcome = transferConfig.s3Client->ListObjectVersions(test);
+		Aws::Vector<Aws::S3::Model::ObjectVersion> object_list = outcome.GetResult().GetVersions();
+
+		std::vector<std::string> ObjectVersions;
+
+		int i = 0; 
+		for (auto result : object_list)
+		{
+			ObjectVersions.push_back(result.GetVersionId());
+
+			std::cout << "List ID(" << i << ")" << std::endl; 
+			std::cout << "File Name: " << result.GetKey() << std::endl;
+			std::cout << "Version ID: " << result.GetVersionId() << "\n" << std::endl;
+
+			i++; 
+		}
+
+		std::cout << "\nWhich version would you like to Download? (Just type the List ID number e.g. 0)" << std::endl; 
+		std::cin >> answer; 
+
+		DownloadConfiguration downloadConfig;
+		downloadConfig.versionId = ObjectVersions[std::stoi(answer)];
+		
+		transferConfig.transferStatusUpdatedCallback =
+			[](const TransferManager*,
+				const std::shared_ptr<const TransferHandle>& handle) {
+					std::cout << "Transfer Status = "
+						<< static_cast<int>(handle->GetStatus()) << "\n";
+		};
+
+		transferConfig.downloadProgressCallback =
+			[](const TransferManager*,
+				const std::shared_ptr<const TransferHandle>& handle) {
+					std::cout << "Download Progress: " << handle->GetBytesTransferred()
+						<< " of " << handle->GetBytesTotalSize() << " bytes\n";
+		};
+
+		auto transferManager = TransferManager::Create(transferConfig);
+		auto transferHandle = transferManager->DownloadFile(BUCKET, file.c_str(), "C:/Users/RuthlessLua/Desktop/AWSDownloads/Test.cpp", downloadConfig);
+		transferHandle->WaitUntilFinished();
+
+		std::cout << file << " Download Complete!\n" << std::endl;
+	}
+	
+	else {
+		//Download latest verison of file
+	}
 }
 
 void CrescentHub::DownloadFile() {
@@ -69,16 +143,13 @@ void CrescentHub::DownloadFile() {
 	TransferManagerConfiguration transferConfig(thread_executor.get());
 	transferConfig.s3Client = s3Client;
 	
-	DownloadConfiguration downloadConfig;
-	downloadConfig.versionId = "Yu_oGmhApIJG_3Evgx3mQfTAESlWMY64";
-
 	transferConfig.transferStatusUpdatedCallback =
 		[](const TransferManager *,
 			const std::shared_ptr<const TransferHandle> &handle) {
 				std::cout << "Transfer Status = "
 					<< static_cast<int>(handle->GetStatus()) << "\n";
 	};
-
+	
 	transferConfig.downloadProgressCallback =
 		[](const TransferManager *,
 			const std::shared_ptr<const TransferHandle> &handle) {
@@ -87,7 +158,7 @@ void CrescentHub::DownloadFile() {
 	};
 
 	auto transferManager = TransferManager::Create(transferConfig);
-	auto transferHandle = transferManager->DownloadFile(BUCKET, "Test.cpp", "C:/Users/RuthlessLua/Desktop/AWSDownloads/Test.cpp", downloadConfig);
+	auto transferHandle = transferManager->DownloadFile(BUCKET, "Test.cpp", "C:/Users/RuthlessLua/Desktop/AWSDownloads/Test.cpp");
 	transferHandle->WaitUntilFinished();
 
 	std::cout << "Test.cpp Download Complete!\n" << std::endl; 

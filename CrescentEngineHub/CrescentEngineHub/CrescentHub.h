@@ -6,6 +6,8 @@
 #include <aws/s3/S3Client.h>
 #include <aws/s3/model/PutObjectRequest.h>
 #include <aws/s3/model/GetObjectRequest.h>
+#include <aws/s3/model/ListObjectVersionsRequest.h>
+#include <aws/s3/model/ListObjectVersionsResult.h>
 #include <aws/core/Aws.h>
 #include <aws/core/utils/memory/stl/AWSStringStream.h> 
 #include <aws/transfer/TransferManager.h>
@@ -53,6 +55,7 @@ private:
 
 	void UploadFile(std::string dir_, std::string filename_);
 	void DownloadFile(); 
+	void CustomDownloadFile(); 
 	std::map<int, FileDetails> filesMap; 
 };
 #endif 
