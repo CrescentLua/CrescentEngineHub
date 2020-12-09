@@ -26,6 +26,7 @@ void CrescentHub::Run() {
 	std::string dir = "C:/Users/RuthlessLua/Desktop/CrescentEngineRepository/Crescent Engine/GameEngines4/Engine/Core/WatchTest";
 	FW::WatchID watchID = fileWatcher.addWatch(dir, &listener, true);
 
+
 	Aws::InitAPI(options);
 
 	while (isRunning) {
@@ -56,6 +57,10 @@ void CrescentHub::Run() {
 				case 81:
 					CustomDownloadFile();
 					break;
+				
+				case 83: 
+					DeleteFile(); 
+					break; 
 			}
 		}
 	}
@@ -198,6 +203,35 @@ void CrescentHub::UploadFile(std::string dir_, std::string filename_) {
 			std::cout << "Error while putting Object " << putObjectOutcome.GetError().GetExceptionName() <<
 				" " << putObjectOutcome.GetError().GetMessage() << std::endl;
 		}
+}
+
+void CrescentHub::DeleteFile() {
+	std::string answer;
+
+	std::cout << "Would you like to delete a file? Type 'yes' or 'no'" << std::endl; 
+	std::cin >> answer; 
+
+	if (answer == "yes") {
+		std::cout << "\nPlease type the file you wish to delete" << std::endl; 
+		std::cin >> answer;
+
+		auto s3Client = Aws::MakeShared<Aws::S3::S3Client>(ALLOC_TAG);
+		auto thread_executor = Aws::MakeShared<Aws::Utils::Threading::PooledThreadExecutor>(ALLOC_TAG, 4);
+		TransferManagerConfiguration transferConfig(thread_executor.get());
+		transferConfig.s3Client = s3Client;
+
+		DeleteObjectRequest deleteObjectRequest;
+		deleteObjectRequest.WithBucket(BUCKET); 
+		deleteObjectRequest.WithKey(answer);
+
+		transferConfig.s3Client->DeleteObject(deleteObjectRequest);
+
+		std::cout << "\nSuccessfully deleted " << answer << "!\n" << std::endl; 
+	}
+
+	else {
+		//Do Nothing
+	}
 }
 
 void CrescentHub::Update() {

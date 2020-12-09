@@ -8,12 +8,12 @@
 #include <aws/s3/model/GetObjectRequest.h>
 #include <aws/s3/model/ListObjectVersionsRequest.h>
 #include <aws/s3/model/ListObjectVersionsResult.h>
+#include <aws/s3/model/DeleteObjectRequest.h>
 #include <aws/core/Aws.h>
 #include <aws/core/utils/memory/stl/AWSStringStream.h> 
 #include <aws/transfer/TransferManager.h>
 #include "FileWatcher/UpdateListener.h"
 #include <conio.h>
-
 
 using namespace std;
 using namespace std::string_literals;
@@ -56,6 +56,7 @@ private:
 	void UploadFile(std::string dir_, std::string filename_);
 	void DownloadFile(); 
 	void CustomDownloadFile(); 
+	void DeleteFile(); 
 	std::map<int, FileDetails> filesMap; 
 };
 #endif 
